@@ -57,7 +57,7 @@ def read_pipeline(pipeline_file_name, markdown_file_name):
       pipeline_description = properties['description']
       
       # write line in markdown file
-      md.write(f'\n Description: {pipeline_description} \n')
+      md.write(f'\n **Description:** {pipeline_description} \n')
       
       md.write('\n\n ### Steps \n')
     
@@ -69,8 +69,8 @@ def read_pipeline(pipeline_file_name, markdown_file_name):
       # name and type activity
       activity_name = act['name']
       tipo_actividad = act['type']
-      md.write(f'\n - **Nombre:** {activity_name} \n')
-      md.write(f'\n   **Tipo:** {tipo_actividad} \n')
+      md.write(f'\n - **Name:** {activity_name} \n')
+      md.write(f'\n   **Type:** {tipo_actividad} \n')
       
       # add activities to mermaid code
       mermaid_code += f"{activity_name.replace(' ', '_')}({activity_name});\n"
@@ -78,16 +78,16 @@ def read_pipeline(pipeline_file_name, markdown_file_name):
       #  if exist activity description. add to markdown file 
       if 'description' in act:
         act_description = act['description']
-        md.write(f'\n   **Descripción:** {act_description} \n')
+        md.write(f'\n   **Description:** {act_description} \n')
         
       # if exists dependencies add to markdown and mermaid code
       if len(act['dependsOn']) > 0:
-        md.write('\n   **Dependencias:**')
+        md.write('\n   **Dependencies:**')
         for dep in act['dependsOn']:
           md.write('\n   * [{0}]({1}) ({2}) \n'.format(dep['activity'], '#'+dep['activity'].replace(' ', '-'), dep['dependencyConditions'][0]))
           mermaid_code += f"{dep['activity'].replace(' ', '_')} --> {activity_name.replace(' ', '_')};\n"
       
-      # If activities is of type Copy, extract SQL query of the source
+      # If activity is a Copy, extract SQL query of the source
       if act['type'] == "Copy":
         # write source info type
         source_info = act['typeProperties']['source']
@@ -116,8 +116,8 @@ def read_pipeline(pipeline_file_name, markdown_file_name):
       # get parameter section
       parameters = properties.get('parameters', {})
       # Iterate over each parameter
-      for parametro, info in parameters.items():
-          parameter_name = parametro
+      for parameter, info in parameters.items():
+          parameter_name = parameter
           parameter_type = info.get('type')
           default_value = info.get('defaultValue')
           md.write(f'\n |{parameter_name}|{parameter_type}|{default_value}|')
